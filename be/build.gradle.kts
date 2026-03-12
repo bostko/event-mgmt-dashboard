@@ -9,5 +9,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = "com.valentin.app.App"
+    mainClass = "com.valentin.be.App"
 }

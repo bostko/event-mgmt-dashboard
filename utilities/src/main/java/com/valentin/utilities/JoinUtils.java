@@ -1,15 +1,13 @@
 package com.valentin.utilities;
 
-import com.valentin.list.LinkedList;
-
-class JoinUtils {
-    public static String join(LinkedList source) {
+public class JoinUtils {
+    public static String join(String[] source) {
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < source.size(); ++i) {
+        for (int i = 0; i < source.length; ++i) {
             if (result.length() > 0) {
                 result.append(" ");
             }
-            result.append(source.get(i));
+            result.append(source[i]);
         }
 
         return result.toString();

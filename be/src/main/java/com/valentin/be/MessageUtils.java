@@ -1,4 +1,4 @@
-package com.valentin.app;
+package com.valentin.be;
 
 class MessageUtils {
     public static String getMessage() {

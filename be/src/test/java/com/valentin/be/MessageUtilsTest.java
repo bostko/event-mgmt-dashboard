@@ -1,4 +1,4 @@
-package com.valentin.app;
+package com.valentin.be;
 
 import org.junit.jupiter.api.Test;
 

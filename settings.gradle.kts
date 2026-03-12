@@ -17,4 +17,4 @@ plugins {
 }
 
 rootProject.name = "event-mgmt-dashboard"
-include("app", "list", "utilities")
+include("be", "utilities")
