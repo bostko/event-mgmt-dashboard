@@ -21,5 +21,4 @@ public class MgmtServiceEntity {
 
     @Getter @Setter
     private String owner;
-
 }

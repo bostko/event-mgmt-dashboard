@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("com.valentin.mgmt.event.domain.entity")
 @EnableJpaRepositories("com.valentin.mgmt.event.domain.repository")
 public class BeSpringBootApplication {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(BeSpringBootApplication.class, args);
     }
 }
