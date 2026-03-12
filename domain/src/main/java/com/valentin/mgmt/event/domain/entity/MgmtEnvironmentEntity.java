@@ -1,4 +1,4 @@
-package com.valentin.mgmt.event.domain;
+package com.valentin.mgmt.event.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,13 +9,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class MgmtService {
+public class MgmtEnvironmentEntity {
     @Id
     private String id;
 
     @Getter
     private String name;
-
-    @Getter
-    private String owner;
 }

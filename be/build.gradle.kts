@@ -16,10 +16,11 @@ testing {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation(project(":entities"))
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
+    implementation(project(":domain"))
     runtimeOnly("com.h2database:h2")
 }
 
 application {
-    mainClass = "com.valentin.mgmt.event.be.App"
+    mainClass = "com.valentin.mgmt.event.be.BeSpringBootApplication"
 }
