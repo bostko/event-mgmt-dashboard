@@ -1,5 +1,24 @@
 <main class="page">
   <a routerLink="/" class="back-link">&larr; Home</a>
   <h1>Manage Environments</h1>
-  <p>Environment management coming soon.</p>
+  <a routerLink="/environments/create" class="btn-primary">Create Environment</a>
+
+  @if (environments() === null) {
+    <p>Loading...</p>
+  } @else if (environments()!.length === 0) {
+    <p>No environments yet.</p>
+  } @else {
+    <ul class="env-list">
+      @for (env of environments()!; track env.id) {
+        <li>
+          <span>{{ env.name }}</span>
+          <div class="row-actions">
+            <a [routerLink]="['/environments', env.id]" class="btn-action">Preview</a>
+            <a [routerLink]="['/environments', env.id, 'edit']" class="btn-action">Edit</a>
+            <a [routerLink]="['/environments', env.id, 'delete']" class="btn-action btn-action--danger">Delete</a>
+          </div>
+        </li>
+      }
+    </ul>
+  }
 </main>

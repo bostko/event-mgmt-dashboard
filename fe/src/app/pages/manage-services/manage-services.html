@@ -1,5 +1,25 @@
 <main class="page">
   <a routerLink="/" class="back-link">&larr; Home</a>
   <h1>Manage Services</h1>
-  <p>Service management coming soon.</p>
+  <a routerLink="/services/create" class="btn-primary">Create Service</a>
+
+  @if (services() === null) {
+    <p>Loading...</p>
+  } @else if (services()!.length === 0) {
+    <p>No services yet.</p>
+  } @else {
+    <ul class="service-list">
+      @for (service of services()!; track service.id) {
+        <li>
+          <span>{{ service.name }}</span>
+          <span class="owner">{{ service.owner }}</span>
+          <div class="row-actions">
+            <a [routerLink]="['/services', service.id]" class="btn-action">Preview</a>
+            <a [routerLink]="['/services', service.id, 'edit']" class="btn-action">Edit</a>
+            <a [routerLink]="['/services', service.id, 'delete']" class="btn-action btn-action--danger">Delete</a>
+          </div>
+        </li>
+      }
+    </ul>
+  }
 </main>

@@ -1,0 +1,21 @@
+<main class="page">
+  <a routerLink="/services" class="back-link">&larr; Manage Services</a>
+  <h1>Create Service</h1>
+  <form class="form" (ngSubmit)="submit()">
+    <label for="svc-name">Name</label>
+    <input id="svc-name" type="text" [(ngModel)]="name" name="name" required autofocus />
+
+    <label for="svc-owner">Owner</label>
+    <input id="svc-owner" type="text" [(ngModel)]="owner" name="owner" required />
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+    <div class="actions">
+      <a routerLink="/services" class="btn-secondary">Cancel</a>
+      <button type="submit" class="btn-primary" [disabled]="submitting() || !name.trim() || !owner.trim()">
+        {{ submitting() ? 'Creating...' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</main>

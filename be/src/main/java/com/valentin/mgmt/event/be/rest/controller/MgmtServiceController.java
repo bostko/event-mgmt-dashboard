@@ -4,10 +4,16 @@ import com.valentin.mgmt.event.be.rest.dto.service.CreateMgmtServiceRequest;
 import com.valentin.mgmt.event.be.rest.dto.service.MgmtServiceResponse;
 import com.valentin.mgmt.event.domain.entity.MgmtServiceEntity;
 import com.valentin.mgmt.event.domain.repository.MgmtServiceRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class MgmtServiceController {
@@ -30,5 +36,31 @@ public class MgmtServiceController {
     @GetMapping("/mgmt-service/all")
     public Iterable<MgmtServiceResponse> getAllMgmtServices() {
         return repository.findAll().stream().map(entity -> new MgmtServiceResponse(entity.getId(), entity.getName(), entity.getOwner())).toList();
+    }
+
+    @GetMapping("/mgmt-service/{id}")
+    public MgmtServiceResponse getEnvironment(@PathVariable Long id) {
+        return repository.findById(id)
+                .map(entity -> new MgmtServiceResponse(entity.getId(), entity.getName(), entity.getOwner()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @PutMapping("/mgmt-service/{id}")
+    public MgmtServiceResponse updateEnvironment(@PathVariable Long id, @RequestBody CreateMgmtServiceRequest request) {
+        MgmtServiceEntity entity = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        entity.setName(request.name());
+        entity.setOwner(request.owner());
+        var result = repository.save(entity);
+        return new MgmtServiceResponse(result.getId(), result.getName(), result.getOwner());
+    }
+
+    @DeleteMapping("/mgmt-service/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEnvironment(@PathVariable Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        repository.deleteById(id);
     }
 }

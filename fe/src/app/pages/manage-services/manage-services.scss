@@ -1,15 +1,22 @@
-.page {
-  padding: 2rem;
-  font-family: sans-serif;
+.service-list {
+  margin-top: 1.5rem;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
 }
 
-.back-link {
-  display: inline-block;
-  margin-bottom: 1rem;
-  color: #333;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
+.owner {
+  font-size: 0.875rem;
+  color: #666;
 }

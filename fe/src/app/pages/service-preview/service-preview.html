@@ -1,0 +1,21 @@
+<main class="page">
+  <a routerLink="/services" class="back-link">&larr; Manage Services</a>
+  <h1>Service Preview</h1>
+
+  @if (service() === null) {
+    <p>Loading...</p>
+  } @else {
+    <dl class="details">
+      <dt>ID</dt>
+      <dd>{{ service()!.id }}</dd>
+      <dt>Name</dt>
+      <dd>{{ service()!.name }}</dd>
+      <dt>Owner</dt>
+      <dd>{{ service()!.owner }}</dd>
+    </dl>
+    <div class="actions">
+      <a [routerLink]="['/services', service()!.id, 'edit']" class="btn-secondary">Edit</a>
+      <a [routerLink]="['/services', service()!.id, 'delete']" class="btn-danger">Delete</a>
+    </div>
+  }
+</main>

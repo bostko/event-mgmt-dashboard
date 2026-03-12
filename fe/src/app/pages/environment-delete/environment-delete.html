@@ -1,0 +1,19 @@
+<main class="page">
+  <a routerLink="/environments" class="back-link">&larr; Manage Environments</a>
+  <h1>Delete Environment</h1>
+
+  @if (environment() === null) {
+    <p>Loading...</p>
+  } @else {
+    <p>Are you sure you want to delete <strong>{{ environment()!.name }}</strong>?</p>
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+    <div class="actions">
+      <a routerLink="/environments" class="btn-secondary">Cancel</a>
+      <button class="btn-danger" (click)="confirm()" [disabled]="deleting()">
+        {{ deleting() ? 'Deleting...' : 'Delete' }}
+      </button>
+    </div>
+  }
+</main>

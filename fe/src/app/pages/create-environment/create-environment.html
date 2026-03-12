@@ -1,0 +1,25 @@
+<main class="page">
+  <a routerLink="/environments" class="back-link">&larr; Manage Environments</a>
+  <h1>Create Environment</h1>
+  <form class="form" (ngSubmit)="submit()">
+    <label for="env-name">Environment name</label>
+    <input
+      id="env-name"
+      type="text"
+      [(ngModel)]="name"
+      name="name"
+      placeholder="e.g. production"
+      required
+      autofocus
+    />
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+    <div class="actions">
+      <a routerLink="/environments" class="btn-secondary">Cancel</a>
+      <button type="submit" class="btn-primary" [disabled]="submitting() || !name.trim()">
+        {{ submitting() ? 'Creating...' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</main>
