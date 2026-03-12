@@ -1,4 +1,4 @@
-package com.valentin.utilities;
+package com.valentin.mgmt.event.domain;
 
 public class JoinUtils {
     public static String join(String[] source) {
