@@ -9,6 +9,10 @@ testing {
     suites {
         val test by getting(JvmTestSuite::class) {
             useJUnitJupiter("6.0.1")
+            dependencies {
+                implementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+                implementation("com.fasterxml.jackson.core:jackson-databind")
+            }
         }
     }
 }
