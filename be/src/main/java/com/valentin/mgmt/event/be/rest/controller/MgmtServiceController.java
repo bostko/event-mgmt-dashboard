@@ -1,7 +1,7 @@
 package com.valentin.mgmt.event.be.rest.controller;
 
-import com.valentin.mgmt.event.be.rest.dto.CreateMgmtServiceRequest;
-import com.valentin.mgmt.event.be.rest.dto.MgmtServiceResponse;
+import com.valentin.mgmt.event.be.rest.dto.service.CreateMgmtServiceRequest;
+import com.valentin.mgmt.event.be.rest.dto.service.MgmtServiceResponse;
 import com.valentin.mgmt.event.domain.entity.MgmtServiceEntity;
 import com.valentin.mgmt.event.domain.repository.MgmtServiceRepository;
 import org.springframework.web.bind.annotation.GetMapping;
