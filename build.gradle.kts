@@ -4,6 +4,16 @@ plugins {
 }
 
 subprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    plugins.withId("java") {
+        the<JavaPluginExtension>().toolchain {
+            languageVersion = JavaLanguageVersion.of(25)
+        }
+    }
+
     apply(plugin = "io.spring.dependency-management")
     configure<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension> {
         imports {

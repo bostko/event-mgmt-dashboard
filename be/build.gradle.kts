@@ -1,7 +1,16 @@
 plugins {
-    id("buildlogic.java-application-conventions")
+    java
+    application
     id("org.springframework.boot")
     id("io.spring.dependency-management")
+}
+
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter("6.0.1")
+        }
+    }
 }
 
 dependencies {
@@ -12,6 +21,5 @@ dependencies {
 }
 
 application {
-    // Define the main class for the application.
     mainClass = "com.valentin.mgmt.event.be.App"
 }
