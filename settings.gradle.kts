@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = "event-mgmt-dashboard"
-include("be", "domain", "service", "fe", "events-generator")
+include("rest-server", "graphql-server", "domain", "service", "fe", "events-generator")

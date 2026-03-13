@@ -1,19 +1,15 @@
-package com.valentin.mgmt.event.generator;
+package com.valentin.mgmt.event.rest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(scanBasePackages = "com.valentin.mgmt.event")
-@EnableScheduling
-@EnableJpaRepositories("com.valentin.mgmt.event.domain.repository")
 @EntityScan("com.valentin.mgmt.event.domain.entity")
-public class EventsGeneratorApplication {
-
+@EnableJpaRepositories("com.valentin.mgmt.event.domain.repository")
+public class BeSpringBootApplication {
     static void main(String[] args) {
-        SpringApplication.run(EventsGeneratorApplication.class, args);
+        SpringApplication.run(BeSpringBootApplication.class, args);
     }
-
 }

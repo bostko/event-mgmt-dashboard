@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +19,12 @@ public class MgmtEventEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Getter
     private UUID id;
+
+    @Getter @Setter
+    private String description;
+
+    @Getter @Setter
+    private Instant timestamp;
 
     @Getter @Setter
     @ManyToOne(optional = false)
