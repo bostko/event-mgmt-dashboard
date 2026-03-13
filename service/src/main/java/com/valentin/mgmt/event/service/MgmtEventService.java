@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class MgmtEventService {
@@ -25,5 +28,20 @@ public class MgmtEventService {
         newEvent.setService(service);
 
         return repository.save(newEvent);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MgmtEventEntity> getAllEvents() {
+        return repository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<MgmtEventEntity> getEventById(UUID id) {
+        return repository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MgmtEventEntity> getEventsByServiceId(Long serviceId) {
+        return repository.findByServiceId(serviceId);
     }
 }
