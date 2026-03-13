@@ -1,0 +1,16 @@
+type Query {
+    mgmtEnvironmentById(id: ID): MgmtEnvironment
+}
+
+type MgmtService {
+    id: ID!
+    name: String
+    owner: String
+    environment: MgmtEnvironment!
+}
+
+type MgmtEnvironment {
+    id: ID!
+    name: String
+    services: [MgmtService!]!
+}

@@ -2,11 +2,15 @@ package com.valentin.mgmt.event.be.rest.controller;
 
 import com.valentin.mgmt.event.be.rest.dto.environment.UpdateMgmtEnvironmentRequest;
 import com.valentin.mgmt.event.be.rest.dto.environment.MgmtEnvironmentResponse;
+import com.valentin.mgmt.event.be.rest.dto.service.MgmtServiceResponse;
 import com.valentin.mgmt.event.domain.entity.MgmtEnvironmentEntity;
+import com.valentin.mgmt.event.domain.entity.MgmtServiceEntity;
 import com.valentin.mgmt.event.domain.repository.MgmtEnvironmentRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 public class MgmtEnvironmentController {
@@ -21,18 +25,18 @@ public class MgmtEnvironmentController {
         MgmtEnvironmentEntity newEntity = new MgmtEnvironmentEntity();
         newEntity.setName(request.name());
         var result = repository.save(newEntity);
-        return new MgmtEnvironmentResponse(result.getId(), result.getName());
+        return toResponse(result);
     }
 
     @GetMapping("/mgmt-environment/all")
     public Iterable<MgmtEnvironmentResponse> getAllEnvironments() {
-        return repository.findAll().stream().map(entity -> new MgmtEnvironmentResponse(entity.getId(), entity.getName())).toList();
+        return repository.findAll().stream().map(this::toResponse).toList();
     }
 
     @GetMapping("/mgmt-environment/{id}")
     public MgmtEnvironmentResponse getEnvironment(@PathVariable Long id) {
         return repository.findById(id)
-                .map(entity -> new MgmtEnvironmentResponse(entity.getId(), entity.getName()))
+                .map(this::toResponse)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -42,7 +46,7 @@ public class MgmtEnvironmentController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         entity.setName(request.name());
         var result = repository.save(entity);
-        return new MgmtEnvironmentResponse(result.getId(), result.getName());
+        return toResponse(result);
     }
 
     @DeleteMapping("/mgmt-environment/{id}")
@@ -52,5 +56,16 @@ public class MgmtEnvironmentController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         repository.deleteById(id);
+    }
+
+    private MgmtEnvironmentResponse toResponse(MgmtEnvironmentEntity entity) {
+        List<MgmtServiceResponse> services = entity.getServices() == null ? List.of() :
+                entity.getServices().stream().map(this::toServiceResponse).toList();
+        return new MgmtEnvironmentResponse(entity.getId(), entity.getName(), services);
+    }
+
+    private MgmtServiceResponse toServiceResponse(MgmtServiceEntity entity) {
+        Long environmentId = entity.getEnvironment() == null ? null : entity.getEnvironment().getId();
+        return new MgmtServiceResponse(entity.getId(), entity.getName(), entity.getOwner(), environmentId);
     }
 }

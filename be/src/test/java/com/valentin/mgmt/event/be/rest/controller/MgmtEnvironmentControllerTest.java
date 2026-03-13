@@ -2,7 +2,9 @@ package com.valentin.mgmt.event.be.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.valentin.mgmt.event.domain.entity.MgmtEnvironmentEntity;
+import com.valentin.mgmt.event.domain.entity.MgmtServiceEntity;
 import com.valentin.mgmt.event.domain.repository.MgmtEnvironmentRepository;
+import com.valentin.mgmt.event.domain.repository.MgmtServiceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +29,14 @@ class MgmtEnvironmentControllerTest {
     private MgmtEnvironmentRepository repository;
 
     @Autowired
+    private MgmtServiceRepository serviceRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
+        serviceRepository.deleteAll();
         repository.deleteAll();
     }
 
@@ -41,7 +47,9 @@ class MgmtEnvironmentControllerTest {
                         .content(objectMapper.writeValueAsString(Map.of("name", "production"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.name").value("production"));
+                .andExpect(jsonPath("$.name").value("production"))
+                .andExpect(jsonPath("$.services").isArray())
+                .andExpect(jsonPath("$.services.length()").value(0));
     }
 
     @Test
@@ -68,7 +76,22 @@ class MgmtEnvironmentControllerTest {
         mockMvc.perform(get("/mgmt-environment/{id}", entity.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(entity.getId()))
-                .andExpect(jsonPath("$.name").value("staging"));
+                .andExpect(jsonPath("$.name").value("staging"))
+                .andExpect(jsonPath("$.services").isArray())
+                .andExpect(jsonPath("$.services.length()").value(0));
+    }
+
+    @Test
+    void getEnvironment_withServices_returnsServicesInResponse() throws Exception {
+        MgmtEnvironmentEntity env = savedEntity("production");
+        savedService("auth-service", "team-a", env);
+        savedService("payment-service", "team-b", env);
+
+        mockMvc.perform(get("/mgmt-environment/{id}", env.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.services.length()").value(2))
+                .andExpect(jsonPath("$.services[0].environmentId").value(env.getId()))
+                .andExpect(jsonPath("$.services[1].environmentId").value(env.getId()));
     }
 
     @Test
@@ -86,7 +109,8 @@ class MgmtEnvironmentControllerTest {
                         .content(objectMapper.writeValueAsString(Map.of("name", "production"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(entity.getId()))
-                .andExpect(jsonPath("$.name").value("production"));
+                .andExpect(jsonPath("$.name").value("production"))
+                .andExpect(jsonPath("$.services").isArray());
     }
 
     @Test
@@ -115,5 +139,13 @@ class MgmtEnvironmentControllerTest {
         MgmtEnvironmentEntity entity = new MgmtEnvironmentEntity();
         entity.setName(name);
         return repository.save(entity);
+    }
+
+    private MgmtServiceEntity savedService(String name, String owner, MgmtEnvironmentEntity environment) {
+        MgmtServiceEntity entity = new MgmtServiceEntity();
+        entity.setName(name);
+        entity.setOwner(owner);
+        entity.setEnvironment(environment);
+        return serviceRepository.save(entity);
     }
 }
