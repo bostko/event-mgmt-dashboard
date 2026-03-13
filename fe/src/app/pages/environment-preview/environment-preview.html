@@ -1,6 +1,5 @@
 <main class="page">
-  <a routerLink="/environments" class="back-link">&larr; Manage Environments</a>
-  <h1>Environment Preview</h1>
+  <a routerLink="/" class="back-link">&larr; Manage Environments</a>
 
   @if (environment() === null) {
     <p>Loading...</p>
@@ -12,8 +11,11 @@
       <dd>{{ environment()!.name }}</dd>
     </dl>
     <div class="actions">
+      <a [routerLink]="['/services/create']" [queryParams]="{ environmentId: environment()!.id }" class="btn-primary">Create Service</a>
       <a [routerLink]="['/environments', environment()!.id, 'edit']" class="btn-secondary">Edit</a>
       <a [routerLink]="['/environments', environment()!.id, 'delete']" class="btn-danger">Delete</a>
     </div>
+
+    <app-manage-services [environmentId]="environment()!.id" />
   }
 </main>

@@ -12,12 +12,20 @@
       <label for="svc-owner">Owner</label>
       <input id="svc-owner" type="text" [(ngModel)]="owner" name="owner" required />
 
+      <label for="svc-env">Environment</label>
+      <select id="svc-env" [(ngModel)]="environmentId" name="environmentId" required>
+        <option [ngValue]="null" disabled>Select an environment</option>
+        @for (env of environments(); track env.id) {
+          <option [ngValue]="env.id">{{ env.name }}</option>
+        }
+      </select>
+
       @if (error()) {
         <p class="error">{{ error() }}</p>
       }
       <div class="actions">
         <a routerLink="/services" class="btn-secondary">Cancel</a>
-        <button type="submit" class="btn-primary" [disabled]="submitting() || !name.trim() || !owner.trim()">
+        <button type="submit" class="btn-primary" [disabled]="submitting() || !name.trim() || !owner.trim() || !environmentId">
           {{ submitting() ? 'Saving...' : 'Save' }}
         </button>
       </div>

@@ -40,13 +40,18 @@ public class MgmtServiceController {
 
     @GetMapping("/mgmt-service/all")
     public Iterable<MgmtServiceResponse> getAllMgmtServices() {
-        return repository.findAll().stream().map(this::toResponse).toList();
+        return repository.findAll().stream().map(MgmtServiceController::toResponse).toList();
+    }
+
+    @GetMapping("/mgmt-service/byEnvironmentId/{environmentId}")
+    public Iterable<MgmtServiceResponse> getAllMgmtServicesByEnvironmentId(@PathVariable Long environmentId) {
+        return repository.findByEnvironmentId(environmentId).stream().map(MgmtServiceController::toResponse).toList();
     }
 
     @GetMapping("/mgmt-service/{id}")
     public MgmtServiceResponse getEnvironment(@PathVariable Long id) {
         return repository.findById(id)
-                .map(this::toResponse)
+                .map(MgmtServiceController::toResponse)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -76,7 +81,7 @@ public class MgmtServiceController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Environment not found: " + environmentId));
     }
 
-    private MgmtServiceResponse toResponse(MgmtServiceEntity entity) {
+    static MgmtServiceResponse toResponse(MgmtServiceEntity entity) {
         Long environmentId = entity.getEnvironment() == null ? null : entity.getEnvironment().getId();
         return new MgmtServiceResponse(entity.getId(), entity.getName(), entity.getOwner(), environmentId);
     }

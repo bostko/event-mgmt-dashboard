@@ -1,8 +1,15 @@
-<main class="page">
-  <a routerLink="/" class="back-link">&larr; Home</a>
-  <h1>Manage Services</h1>
-  <a routerLink="/services/create" class="btn-primary">Create Service</a>
+@if (environmentId === null) {
+  <main class="page">
+    <a routerLink="/" class="back-link">&larr; Home</a>
+    <h1>Manage Services</h1>
+    <a routerLink="/services/create" class="btn-primary">Create Service</a>
+    <ng-container *ngTemplateOutlet="serviceList" />
+  </main>
+} @else {
+  <ng-container *ngTemplateOutlet="serviceList" />
+}
 
+<ng-template #serviceList>
   @if (services() === null) {
     <p>Loading...</p>
   } @else if (services()!.length === 0) {
@@ -22,4 +29,4 @@
       }
     </ul>
   }
-</main>
+</ng-template>

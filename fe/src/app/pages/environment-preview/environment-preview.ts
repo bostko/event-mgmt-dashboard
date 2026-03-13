@@ -3,10 +3,11 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import { MgmtEnvironmentResponse } from '../../api/model';
+import { ManageServices } from '../manage-services/manage-services';
 
 @Component({
   selector: 'app-environment-preview',
-  imports: [RouterLink],
+  imports: [RouterLink, ManageServices],
   templateUrl: './environment-preview.html'
 })
 export class EnvironmentPreview implements OnInit {

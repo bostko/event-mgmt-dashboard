@@ -1,5 +1,5 @@
 <main class="page">
-  <a routerLink="/services" class="back-link">&larr; Manage Services</a>
+  <a [routerLink]="['/environments', environmentId]" class="back-link">&larr; Back to <strong>{{environment.name}}</strong> Environment</a>
   <h1>Create Service</h1>
   <form class="form" (ngSubmit)="submit()">
     <label for="svc-name">Name</label>
@@ -8,12 +8,16 @@
     <label for="svc-owner">Owner</label>
     <input id="svc-owner" type="text" [(ngModel)]="owner" name="owner" required />
 
+    <label for="svc-env-name">Environment</label>
+    <input id="svc-env" type="hidden" [(ngModel)]="environmentId" name="environmentId" required>
+    <strong>{{environment()?.name}}</strong>
+
     @if (error()) {
       <p class="error">{{ error() }}</p>
     }
     <div class="actions">
-      <a routerLink="/services" class="btn-secondary">Cancel</a>
-      <button type="submit" class="btn-primary" [disabled]="submitting() || !name.trim() || !owner.trim()">
+      <a [routerLink]="['/environments', environmentId]" class="btn-secondary">Cancel</a>
+      <button type="submit" class="btn-primary" [disabled]="submitting() || !name.trim() || !owner.trim() || !environmentId">
         {{ submitting() ? 'Creating...' : 'Create' }}
       </button>
     </div>

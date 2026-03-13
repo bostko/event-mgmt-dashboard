@@ -7,4 +7,5 @@ export interface MgmtServiceResponse {
   id: number;
   name: string;
   owner: string;
+  environmentId: number;
 }

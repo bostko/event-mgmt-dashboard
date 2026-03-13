@@ -6,6 +6,7 @@ import com.valentin.mgmt.event.be.rest.dto.service.MgmtServiceResponse;
 import com.valentin.mgmt.event.domain.entity.MgmtEnvironmentEntity;
 import com.valentin.mgmt.event.domain.entity.MgmtServiceEntity;
 import com.valentin.mgmt.event.domain.repository.MgmtEnvironmentRepository;
+import com.valentin.mgmt.event.domain.repository.MgmtServiceRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,9 +16,11 @@ import java.util.List;
 @RestController
 public class MgmtEnvironmentController {
     private final MgmtEnvironmentRepository repository;
+    private final MgmtServiceRepository mgmtServiceRepository;
 
-    public MgmtEnvironmentController(MgmtEnvironmentRepository repository) {
+    public MgmtEnvironmentController(MgmtEnvironmentRepository repository, MgmtServiceRepository mgmtServiceRepository) {
         this.repository = repository;
+        this.mgmtServiceRepository = mgmtServiceRepository;
     }
 
     @PostMapping("/mgmt-environment")
@@ -38,6 +41,11 @@ public class MgmtEnvironmentController {
         return repository.findById(id)
                 .map(this::toResponse)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/mgmt-environment/{id}/services")
+    public Iterable<MgmtServiceResponse> getServicesByEnvironment(@PathVariable Long id) {
+        return mgmtServiceRepository.findByEnvironmentId(id).stream().map(MgmtServiceController::toResponse).toList();
     }
 
     @PutMapping("/mgmt-environment/{id}")

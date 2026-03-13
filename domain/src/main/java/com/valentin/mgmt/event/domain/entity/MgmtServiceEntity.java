@@ -23,6 +23,7 @@ public class MgmtServiceEntity {
     @Getter @Setter
     private String owner;
 
+    // fetch = jakarta.persistence.FetchType.EAGER (do I need that one)
     @Getter @Setter
     @ManyToOne(optional = false)
     private MgmtEnvironmentEntity environment;

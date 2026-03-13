@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ManageEnvironments } from '../manage-environments/manage-environments';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
+  imports: [ManageEnvironments],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })

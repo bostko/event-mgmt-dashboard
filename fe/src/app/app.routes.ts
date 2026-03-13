@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
-import { ManageServices } from './pages/manage-services/manage-services';
-import { ManageEnvironments } from './pages/manage-environments/manage-environments';
 import { CreateEnvironment } from './pages/create-environment/create-environment';
 import { EnvironmentPreview } from './pages/environment-preview/environment-preview';
 import { EnvironmentEdit } from './pages/environment-edit/environment-edit';
@@ -13,12 +11,10 @@ import { ServiceDelete } from './pages/service-delete/service-delete';
 
 export const routes: Routes = [
   { path: '', component: Home },
-  { path: 'services', component: ManageServices },
   { path: 'services/create', component: CreateService },
   { path: 'services/:id', component: ServicePreview },
   { path: 'services/:id/edit', component: ServiceEdit },
   { path: 'services/:id/delete', component: ServiceDelete },
-  { path: 'environments', component: ManageEnvironments },
   { path: 'environments/create', component: CreateEnvironment },
   { path: 'environments/:id', component: EnvironmentPreview },
   { path: 'environments/:id/edit', component: EnvironmentEdit },

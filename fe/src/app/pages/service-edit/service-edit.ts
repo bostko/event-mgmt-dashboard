@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { MgmtServiceResponse } from '../../api/model';
+import { MgmtEnvironmentResponse, MgmtServiceResponse } from '../../api/model';
 
 @Component({
   selector: 'app-service-edit',
@@ -19,26 +19,32 @@ export class ServiceEdit implements OnInit {
 
   name = '';
   owner = '';
+  environmentId: number | null = null;
+  environments = signal<MgmtEnvironmentResponse[]>([]);
   loading = signal(true);
   submitting = signal(false);
   error = signal<string | null>(null);
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')!;
+    this.http.get<MgmtEnvironmentResponse[]>('/mgmt-environment/all').subscribe({
+      next: (data) => this.environments.set(data)
+    });
     this.http.get<MgmtServiceResponse>(`/mgmt-service/${this.id}`).subscribe({
       next: (data) => {
         this.name = data.name;
         this.owner = data.owner;
+        this.environmentId = data.environmentId;
         this.loading.set(false);
       }
     });
   }
 
   submit(): void {
-    if (!this.name.trim() || !this.owner.trim()) return;
+    if (!this.name.trim() || !this.owner.trim() || !this.environmentId) return;
     this.submitting.set(true);
     this.error.set(null);
-    this.http.put(`/mgmt-service/${this.id}`, { name: this.name.trim(), owner: this.owner.trim() }).subscribe({
+    this.http.put(`/mgmt-service/${this.id}`, { name: this.name.trim(), owner: this.owner.trim(), environmentId: this.environmentId }).subscribe({
       next: () => this.router.navigate(['/services']),
       error: () => {
         this.error.set('Failed to update service. Please try again.');
