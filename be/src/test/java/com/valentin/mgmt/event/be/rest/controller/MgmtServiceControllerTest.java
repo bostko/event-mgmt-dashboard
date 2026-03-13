@@ -64,11 +64,11 @@ class MgmtServiceControllerTest {
     }
 
     @Test
-    void createService_withInvalidEnvironmentId_returns400() throws Exception {
+    void createService_withInvalidEnvironmentId_returns404() throws Exception {
         mockMvc.perform(post("/mgmt-service")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(Map.of("name", "auth-service", "owner", "team-a", "environmentId", 999L))))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -78,14 +78,14 @@ class MgmtServiceControllerTest {
 
         mockMvc.perform(get("/mgmt-service/all"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath("$.content.length()").value(2));
     }
 
     @Test
     void getAllServices_whenEmpty_returnsEmptyList() throws Exception {
         mockMvc.perform(get("/mgmt-service/all"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(jsonPath("$.content.length()").value(0));
     }
 
     @Test
@@ -136,6 +136,17 @@ class MgmtServiceControllerTest {
     void updateService_whenNotExists_returns404() throws Exception {
         mockMvc.perform(put("/mgmt-service/{id}", 999L)
                         .param("environmentId", defaultEnv.getId().toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Map.of("name", "auth-service", "owner", "team-a"))))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateService_withInvalidEnvironmentId_returns404() throws Exception {
+        MgmtServiceEntity entity = savedEntity("auth-service", "team-a");
+
+        mockMvc.perform(put("/mgmt-service/{id}", entity.getId())
+                        .param("environmentId", "999")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(Map.of("name", "auth-service", "owner", "team-a"))))
                 .andExpect(status().isNotFound());

@@ -3,11 +3,12 @@ package com.valentin.mgmt.event.be.rest.controller;
 import com.valentin.mgmt.event.be.rest.dto.environment.MgmtEnvironmentResponse;
 import com.valentin.mgmt.event.be.rest.dto.environment.UpdateMgmtEnvironmentRequest;
 import com.valentin.mgmt.event.be.rest.dto.service.MgmtServiceResponse;
-import com.valentin.mgmt.event.be.rest.service.MgmtEnvironmentService;
-import com.valentin.mgmt.event.be.rest.service.MgmtServiceService;
+import com.valentin.mgmt.event.service.MgmtEnvironmentService;
+import com.valentin.mgmt.event.service.MgmtServiceService;
 import com.valentin.mgmt.event.domain.entity.MgmtEnvironmentEntity;
 import com.valentin.mgmt.event.domain.entity.MgmtServiceEntity;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -38,8 +40,10 @@ public class MgmtEnvironmentController {
     }
 
     @GetMapping("/mgmt-environment/all")
-    public Iterable<MgmtEnvironmentResponse> getAllEnvironments() {
-        return mgmtEnvironmentService.getAllEnvironments().stream().map(this::toResponse).toList();
+    public Page<MgmtEnvironmentResponse> getAllEnvironments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return mgmtEnvironmentService.getAllEnvironments(page, size).map(this::toResponse);
     }
 
     @GetMapping("/mgmt-environment/{id}")

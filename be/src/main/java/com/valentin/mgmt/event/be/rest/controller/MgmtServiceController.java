@@ -2,11 +2,9 @@ package com.valentin.mgmt.event.be.rest.controller;
 
 import com.valentin.mgmt.event.be.rest.dto.service.CreateMgmtServiceRequest;
 import com.valentin.mgmt.event.be.rest.dto.service.MgmtServiceResponse;
-import com.valentin.mgmt.event.be.rest.service.MgmtServiceService;
-import com.valentin.mgmt.event.domain.entity.MgmtEnvironmentEntity;
+import com.valentin.mgmt.event.service.MgmtServiceService;
 import com.valentin.mgmt.event.domain.entity.MgmtServiceEntity;
-import com.valentin.mgmt.event.domain.repository.MgmtEnvironmentRepository;
-import com.valentin.mgmt.event.domain.repository.MgmtServiceRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +35,10 @@ public class MgmtServiceController {
     }
 
     @GetMapping("/mgmt-service/all")
-    public Iterable<MgmtServiceResponse> getAllMgmtServices() {
-        return mgmtServiceService.getAllServices().stream().map(MgmtServiceController::toResponse).toList();
+    public Page<MgmtServiceResponse> getAllMgmtServices(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return mgmtServiceService.getAllServices(page, size).map(MgmtServiceController::toResponse);
     }
 
     @GetMapping("/mgmt-service/byEnvironmentId/{environmentId}")

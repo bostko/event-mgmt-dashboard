@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { MgmtEnvironmentResponse } from '../../api/model';
+import { MgmtEnvironmentResponse, Page } from '../../api/model';
 
 @Component({
   selector: 'app-manage-environments',
@@ -16,8 +16,8 @@ export class ManageEnvironments implements OnInit {
   readonly environments = signal<MgmtEnvironmentResponse[] | null>(null);
 
   ngOnInit(): void {
-    this.http.get<MgmtEnvironmentResponse[]>('/mgmt-environment/all').subscribe({
-      next: (data) => this.environments.set(data)
+    this.http.get<Page<MgmtEnvironmentResponse>>('/mgmt-environment/all').subscribe({
+      next: (data) => this.environments.set(data.content)
     });
   }
 }

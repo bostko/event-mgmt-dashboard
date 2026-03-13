@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { MgmtEnvironmentResponse, MgmtServiceResponse } from '../../api/model';
+import { MgmtEnvironmentResponse, MgmtServiceResponse, Page } from '../../api/model';
 
 @Component({
   selector: 'app-service-edit',
@@ -27,8 +27,8 @@ export class ServiceEdit implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')!;
-    this.http.get<MgmtEnvironmentResponse[]>('/mgmt-environment/all').subscribe({
-      next: (data) => this.environments.set(data)
+    this.http.get<Page<MgmtEnvironmentResponse>>('/mgmt-environment/all').subscribe({
+      next: (data) => this.environments.set(data.content)
     });
     this.http.get<MgmtServiceResponse>(`/mgmt-service/${this.id}`).subscribe({
       next: (data) => {

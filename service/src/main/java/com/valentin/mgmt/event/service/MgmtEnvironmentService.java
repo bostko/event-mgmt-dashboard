@@ -1,14 +1,13 @@
-package com.valentin.mgmt.event.be.rest.service;
+package com.valentin.mgmt.event.service;
 
 import com.valentin.mgmt.event.domain.entity.MgmtEnvironmentEntity;
+import com.valentin.mgmt.event.domain.exception.NotFoundException;
 import com.valentin.mgmt.event.domain.repository.MgmtEnvironmentRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,12 +19,11 @@ public class MgmtEnvironmentService {
     }
 
     @Transactional(readOnly = true)
-    public List<MgmtEnvironmentEntity> getAllEnvironments() {
-        return repository.findAll(PageRequest.of(0,2)).stream().toList();
+    public Page<MgmtEnvironmentEntity> getAllEnvironments(int page, int size) {
+        return repository.findAll(PageRequest.of(page, size));
     }
 
-
-    @Transactional()
+    @Transactional
     public MgmtEnvironmentEntity createEnvironment(String name) {
         MgmtEnvironmentEntity newEntity = new MgmtEnvironmentEntity();
         newEntity.setName(name);
@@ -38,14 +36,14 @@ public class MgmtEnvironmentService {
 
     public MgmtEnvironmentEntity updateEnvironment(Long id, String name) {
         MgmtEnvironmentEntity entity = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException("Environment not found: " + id));
         entity.setName(name);
         return repository.save(entity);
     }
 
     public void deleteEnvironment(Long id) {
         if (!repository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Environment not found: " + id);
         }
         repository.deleteById(id);
     }
