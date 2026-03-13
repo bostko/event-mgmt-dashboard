@@ -17,3 +17,14 @@ export interface MgmtServiceResponse {
   owner: string;
   environmentId: number;
 }
+
+export interface MgmtEventResponse {
+  id: string;
+  description: string;
+  timestamp: string;
+  service: {
+    id: string;
+    name: string;
+    owner: string;
+  };
+}

@@ -31,6 +31,11 @@ public class MgmtEventService {
     }
 
     @Transactional(readOnly = true)
+    public List<MgmtEventEntity> getEventsAfter(Instant since) {
+        return repository.findByTimestampAfterOrderByTimestampAsc(since);
+    }
+
+    @Transactional(readOnly = true)
     public List<MgmtEventEntity> getAllEvents() {
         return repository.findAll();
     }

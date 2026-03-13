@@ -1,3 +1,7 @@
+type Subscription {
+    mgmtEventCreated: MgmtEvent!
+}
+
 type Query {
     mgmtEnvironmentById(id: ID): MgmtEnvironment
     mgmtEvents: [MgmtEvent!]!

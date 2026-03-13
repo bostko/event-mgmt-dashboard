@@ -24,7 +24,7 @@ public class EventsGeneratorService {
         this.mgmtEnvironmentService = mgmtEnvironmentService;
     }
 
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelay = 5000)
     public void helloWorld() {
         logger.info("======");
         logger.info("Generating a new batch of events");
