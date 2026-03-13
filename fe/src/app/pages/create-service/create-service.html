@@ -1,5 +1,5 @@
 <main class="page">
-  <a [routerLink]="['/environments', environmentId]" class="back-link">&larr; Back to <strong>{{environment.name}}</strong> Environment</a>
+  <a [routerLink]="['/environments', environmentId]" class="back-link">&larr; Back to <strong>{{environment()?.name}}</strong> Environment</a>
   <h1>Create Service</h1>
   <form class="form" (ngSubmit)="submit()">
     <label for="svc-name">Name</label>
