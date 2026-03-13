@@ -1,69 +1,69 @@
 package com.valentin.mgmt.event.be.rest.controller;
 
-import com.valentin.mgmt.event.be.rest.dto.environment.UpdateMgmtEnvironmentRequest;
 import com.valentin.mgmt.event.be.rest.dto.environment.MgmtEnvironmentResponse;
+import com.valentin.mgmt.event.be.rest.dto.environment.UpdateMgmtEnvironmentRequest;
 import com.valentin.mgmt.event.be.rest.dto.service.MgmtServiceResponse;
+import com.valentin.mgmt.event.be.rest.service.MgmtEnvironmentService;
+import com.valentin.mgmt.event.be.rest.service.MgmtServiceService;
 import com.valentin.mgmt.event.domain.entity.MgmtEnvironmentEntity;
 import com.valentin.mgmt.event.domain.entity.MgmtServiceEntity;
-import com.valentin.mgmt.event.domain.repository.MgmtEnvironmentRepository;
-import com.valentin.mgmt.event.domain.repository.MgmtServiceRepository;
+
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
 public class MgmtEnvironmentController {
-    private final MgmtEnvironmentRepository repository;
-    private final MgmtServiceRepository mgmtServiceRepository;
+    private final MgmtEnvironmentService mgmtEnvironmentService;
+    private final MgmtServiceService mgmtServiceService;
 
-    public MgmtEnvironmentController(MgmtEnvironmentRepository repository, MgmtServiceRepository mgmtServiceRepository) {
-        this.repository = repository;
-        this.mgmtServiceRepository = mgmtServiceRepository;
+    public MgmtEnvironmentController(MgmtEnvironmentService mgmtEnvironmentService, MgmtServiceService mgmtServiceService) {
+        this.mgmtEnvironmentService = mgmtEnvironmentService;
+        this.mgmtServiceService = mgmtServiceService;
     }
 
     @PostMapping("/mgmt-environment")
     public MgmtEnvironmentResponse createEnvironment(@RequestBody UpdateMgmtEnvironmentRequest request) {
-        MgmtEnvironmentEntity newEntity = new MgmtEnvironmentEntity();
-        newEntity.setName(request.name());
-        var result = repository.save(newEntity);
+        var result = mgmtEnvironmentService.createEnvironment(request.name());
         return toResponse(result);
     }
 
     @GetMapping("/mgmt-environment/all")
     public Iterable<MgmtEnvironmentResponse> getAllEnvironments() {
-        return repository.findAll().stream().map(this::toResponse).toList();
+        return mgmtEnvironmentService.getAllEnvironments().stream().map(this::toResponse).toList();
     }
 
     @GetMapping("/mgmt-environment/{id}")
     public MgmtEnvironmentResponse getEnvironment(@PathVariable Long id) {
-        return repository.findById(id)
+        return mgmtEnvironmentService.getEnvironment(id)
                 .map(this::toResponse)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/mgmt-environment/{id}/services")
     public Iterable<MgmtServiceResponse> getServicesByEnvironment(@PathVariable Long id) {
-        return mgmtServiceRepository.findByEnvironmentId(id).stream().map(MgmtServiceController::toResponse).toList();
+        return mgmtServiceService.getServicesByEnvironment(id).stream().map(this::toServiceResponse).toList();
     }
 
     @PutMapping("/mgmt-environment/{id}")
     public MgmtEnvironmentResponse updateEnvironment(@PathVariable Long id, @RequestBody UpdateMgmtEnvironmentRequest request) {
-        MgmtEnvironmentEntity entity = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        entity.setName(request.name());
-        var result = repository.save(entity);
+        var result = mgmtEnvironmentService.updateEnvironment(id, request.name());
         return toResponse(result);
     }
 
     @DeleteMapping("/mgmt-environment/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEnvironment(@PathVariable Long id) {
-        if (!repository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        repository.deleteById(id);
+        mgmtEnvironmentService.deleteEnvironment(id);
     }
 
     private MgmtEnvironmentResponse toResponse(MgmtEnvironmentEntity entity) {

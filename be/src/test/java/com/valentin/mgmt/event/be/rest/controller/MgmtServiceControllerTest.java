@@ -112,8 +112,9 @@ class MgmtServiceControllerTest {
         MgmtEnvironmentEntity otherEnv = savedEnvironment("staging");
 
         mockMvc.perform(put("/mgmt-service/{id}", entity.getId())
+                        .param("environmentId", otherEnv.getId().toString())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(Map.of("name", "auth-service-v2", "owner", "team-b", "environmentId", otherEnv.getId()))))
+                        .content(objectMapper.writeValueAsString(Map.of("name", "auth-service-v2", "owner", "team-b"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(entity.getId()))
                 .andExpect(jsonPath("$.name").value("auth-service-v2"))
@@ -134,8 +135,9 @@ class MgmtServiceControllerTest {
     @Test
     void updateService_whenNotExists_returns404() throws Exception {
         mockMvc.perform(put("/mgmt-service/{id}", 999L)
+                        .param("environmentId", defaultEnv.getId().toString())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(Map.of("name", "auth-service", "owner", "team-a", "environmentId", defaultEnv.getId()))))
+                        .content(objectMapper.writeValueAsString(Map.of("name", "auth-service", "owner", "team-a"))))
                 .andExpect(status().isNotFound());
     }
 
