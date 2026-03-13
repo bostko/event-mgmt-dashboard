@@ -2,7 +2,6 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { API_BASE_URL } from '../../api-base-url.token';
 import { MgmtServiceResponse } from '../../api/model';
 
 @Component({
@@ -12,7 +11,6 @@ import { MgmtServiceResponse } from '../../api/model';
 })
 export class ServiceDelete implements OnInit {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = inject(API_BASE_URL);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -24,7 +22,7 @@ export class ServiceDelete implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')!;
-    this.http.get<MgmtServiceResponse>(`${this.baseUrl}/mgmt-service/${this.id}`).subscribe({
+    this.http.get<MgmtServiceResponse>(`/mgmt-service/${this.id}`).subscribe({
       next: (data) => this.service.set(data)
     });
   }
@@ -32,7 +30,7 @@ export class ServiceDelete implements OnInit {
   confirm(): void {
     this.deleting.set(true);
     this.error.set(null);
-    this.http.delete(`${this.baseUrl}/mgmt-service/${this.id}`).subscribe({
+    this.http.delete(`/mgmt-service/${this.id}`).subscribe({
       next: () => this.router.navigate(['/services']),
       error: () => {
         this.error.set('Failed to delete service. Please try again.');

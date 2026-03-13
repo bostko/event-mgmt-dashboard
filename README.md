@@ -12,3 +12,4 @@
   * Separated domain in another module since I doubt I may need domain entities for GraphQL or something else
 * Asked Claude for setting spring boot bom version on root module since I couldn't get it right with tutorials. And a lot of them seem a bit outdated with groovy based gradle.
 * Relied a lot on claude to generate angular pages
+* https://spring.io/guides/gs/graphql-server
