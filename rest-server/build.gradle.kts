@@ -27,5 +27,5 @@ dependencies {
 }
 
 application {
-    mainClass = "com.valentin.mgmt.event.be.BeSpringBootApplication"
+    mainClass = "com.valentin.mgmt.event.rest.BeSpringBootApplication"
 }
